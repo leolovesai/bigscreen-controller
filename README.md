@@ -34,8 +34,8 @@
 需要 Go 1.24+ 和 Google Chrome。
 
 ```bash
-git clone https://github.com/leolovesai/deskctl.git
-cd deskctl
+git clone https://github.com/leolovesai/bigscreen-controller.git
+cd bigscreen-controller
 
 # 至少改掉 password，再把 scenes 换成你自己的页面
 cp config.example.yaml config.yaml
@@ -149,7 +149,7 @@ go run ./cmd/verify -k <token> -scene <id>   # 采样被控窗口亮度，检测
 ## 目录结构
 
 ```
-deskctl/
+bigscreen-controller/
 ├── main.go                    # 启动、embed 前端、优雅退出、终端二维码
 ├── internal/
 │   ├── config/config.go       # yaml 加载与校验

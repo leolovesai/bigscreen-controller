@@ -34,8 +34,8 @@ No screenshots, no synthetic system events, no system permissions. Everything go
 Requires Go 1.24+ and Google Chrome.
 
 ```bash
-git clone https://github.com/leolovesai/deskctl.git
-cd deskctl
+git clone https://github.com/leolovesai/bigscreen-controller.git
+cd bigscreen-controller
 
 # At minimum change the password, then point scenes at your own pages
 cp config.example.yaml config.yaml
@@ -149,7 +149,7 @@ go run ./cmd/verify -k <token> -scene <id>    # Sample window luminance to detec
 ## Project Layout
 
 ```
-deskctl/
+bigscreen-controller/
 ├── main.go                    # Startup, embedded frontend, graceful shutdown, terminal QR
 ├── internal/
 │   ├── config/config.go       # YAML loading and validation

@@ -48,7 +48,7 @@
 ## 3. 目录结构
 
 ```
-deskctl/
+bigscreen-controller/
 ├── main.go                     # 启动、embed 前端、优雅退出
 ├── internal/
 │   ├── config/config.go        # yaml 加载 + 校验（URL scheme 白名单、密码强制）
