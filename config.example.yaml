@@ -1,0 +1,31 @@
+server:
+  # 0.0.0.0 = 局域网设备（手机/平板）也能当遥控器；只想本机用就改回 127.0.0.1
+  host: 0.0.0.0
+  port: 7788
+  # host 不是 127.0.0.1 时此项必填，否则启动直接报错。部署前务必改掉。
+  password: change-me
+  # 启动后是否自动打开控制器页面。默认 false = 静默启动，只输出访问地址
+  autoOpen: false
+
+capture:
+  # 下发到客户端的 JPEG 质量。分辨率不再固定，由客户端面板宽度决定
+  quality: 60
+
+chrome:
+  # 留空自动探测；Windows 例：C:\Program Files\Google\Chrome\Application\chrome.exe
+  binary: ""
+  userDataDir: ~/.deskctl/chrome-profile
+  windowSize: [1512, 945]
+  # true = 无标签栏/地址栏的纯网页窗口，全屏后是干净的大屏效果
+  # false = 普通 Chrome 窗口（全屏后仍保留工具栏）
+  appMode: true
+  extraArgs:
+    - --disable-features=Translate,MediaRouter
+
+scenes:
+  - id: demo
+    name: 示例页面
+    url: https://example.com/
+    fullscreen: true
+    wait: load
+    timeoutMs: 8000

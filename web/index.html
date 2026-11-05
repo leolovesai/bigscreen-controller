@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d1117">
+<title>deskctl · 控制器</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div id="login" class="login hidden">
+  <form id="loginForm" class="card" autocomplete="on">
+    <h1>deskctl</h1>
+    <p>输入访问密码</p>
+    <input id="pwd" type="password" placeholder="密码" autocomplete="current-password" inputmode="text">
+    <button type="submit">进入</button>
+    <div id="loginErr" class="err"></div>
+  </form>
+</div>
+
+<header class="bar">
+  <span id="dot" class="dot off"></span>
+  <span id="stat" class="stat">连接中…</span>
+  <span class="grow"></span>
+  <span id="fsBadge" class="badge hidden">全屏中</span>
+  <div class="acts">
+    <button id="btnCfg" class="icon" aria-label="推流设置" title="推流设置">⚙</button>
+    <button id="btnFull" class="icon" aria-label="全屏" title="全屏">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path class="i-max" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+        <path class="i-min" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>
+      </svg>
+    </button>
+    <button id="btnFocus" class="icon" aria-label="前台" title="前台">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3.5" y="9.5" width="17" height="11" rx="2.2"/>
+        <path d="M12 3v6M9.2 6.2 12 3l2.8 3.2"/>
+      </svg>
+    </button>
+    <button id="btnRestart" class="icon" aria-label="重启 Chrome" title="重启 Chrome">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3.5v7.5"/>
+        <path d="M7.6 6.4a7.5 7.5 0 1 0 8.8 0"/>
+      </svg>
+    </button>
+    <button id="btnReconnect" class="icon" aria-label="刷新重连" title="刷新重连">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 11a8 8 0 0 0-13.6-5.7L3 8"/>
+        <path d="M3 3.5V8h4.5"/>
+        <path d="M4 13a8 8 0 0 0 13.6 5.7L21 16"/>
+        <path d="M21 20.5V16h-4.5"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="stage">
+    <div id="wrap" class="wrap">
+      <canvas id="cv"></canvas>
+      <div id="cursor" class="cursor hidden"></div>
+      <div id="hint" class="hint">还没有打开页面</div>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="tabs">
+      <button class="tab on" data-pane="scenes">场景</button>
+      <button class="tab" data-pane="elems">页面按钮<b id="elCount" class="cnt">0</b></button>
+    </div>
+
+    <div id="paneScenes" class="pane">
+      <div class="grp">
+        <div class="grp-title">场景</div>
+        <div id="scenes" class="scenes"></div>
+      </div>
+    </div>
+
+    <div id="paneElems" class="pane hidden">
+      <div class="elbar">
+        <span id="elUrl" class="elurl">等待页面…</span>
+        <button id="btnScan" class="icon">刷新</button>
+      </div>
+      <div id="elems" class="elems">
+        <div class="empty">页面加载后会自动列出可点击的按钮</div>
+      </div>
+    </div>
+
+    <div class="dock">
+      <div class="row4">
+        <button class="big" data-swipe="left"><span class="ico">←</span>左滑</button>
+        <button class="big" data-swipe="right"><span class="ico">→</span>右滑</button>
+        <button class="big" data-scroll="-1"><span class="ico">↑</span>上一页</button>
+        <button class="big" data-scroll="1"><span class="ico">↓</span>下一页</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="sheet" class="sheet">
+    <div class="sheet-head">
+      <span>推流设置</span>
+      <button id="btnCfgClose" class="icon">完成</button>
+    </div>
+    <div class="sheet-body">
+      <label class="row"><span>清晰</span><input id="q" type="range" min="30" max="90" value="60"><b id="qv">60</b></label>
+      <div id="info" class="info">—</div>
+    </div>
+  </div>
+</main>
+
+<script src="./app.js"></script>
+</body>
+</html>

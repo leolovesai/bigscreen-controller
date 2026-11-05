@@ -1,0 +1,8 @@
+.DS_Store
+
+# 编译产物
+/deskctl
+/_e2e
+
+# 本地配置（含业务地址与密码）
+config.yaml
