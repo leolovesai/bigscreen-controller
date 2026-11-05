@@ -174,3 +174,7 @@ deskctl/
 - [gopkg.in/yaml.v3](https://gopkg.in/yaml.v3) — Config parsing
 
 The frontend uses no framework and no build step; icons are inline SVG.
+
+## License
+
+[MIT](LICENSE) © 2026 leo

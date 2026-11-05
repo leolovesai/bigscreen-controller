@@ -174,3 +174,7 @@ deskctl/
 - [gopkg.in/yaml.v3](https://gopkg.in/yaml.v3) — 配置解析
 
 前端不引入任何框架和构建步骤，图标为内联 SVG。
+
+## 许可证
+
+[MIT](LICENSE) © 2026 leo
