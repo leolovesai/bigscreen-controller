@@ -3,12 +3,14 @@ package server
 import (
 	"context"
 	"crypto/rand"
+	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/hex"
 	"encoding/json"
 	"io/fs"
 	"net"
 	"net/http"
+	"runtime"
 	"strconv"
 	"sync"
 	"time"
@@ -268,10 +270,22 @@ func securityHeaders(next http.Handler) http.Handler {
 	})
 }
 
+// sessionCookie 是种进 cookie 的值，必须跨重启稳定。启动 token 每次 New() 都换，
+// 拿它当会话凭证会让已打开的页面在服务重启后一律 401：WS 升级被拒、重连永远失败。
+// 所以会话凭证由密码派生——重启不变，改密码即让所有旧会话失效。
+// 密码为空（只允许出现在回环地址）时没有可撑住会话的密钥，退回启动 token。
+func (s *Server) sessionCookie() string {
+	if s.cfg.Server.Password == "" {
+		return s.token
+	}
+	sum := sha256.Sum256([]byte("deskctl-session-v1|" + s.cfg.Server.Password))
+	return hex.EncodeToString(sum[:])
+}
+
 func (s *Server) setCookie(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "dk",
-		Value:    s.token,
+		Value:    s.sessionCookie(),
 		Path:     "/",
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
@@ -286,7 +300,7 @@ func (s *Server) authorized(r *http.Request) bool {
 		}
 	}
 	c, err := r.Cookie("dk")
-	if err == nil && subtle.ConstantTimeCompare([]byte(c.Value), []byte(s.token)) == 1 {
+	if err == nil && subtle.ConstantTimeCompare([]byte(c.Value), []byte(s.sessionCookie())) == 1 {
 		return true
 	}
 	return false
@@ -353,7 +367,7 @@ func (s *Server) handleState(w http.ResponseWriter, r *http.Request) {
 		"chrome":   s.ch.Status(),
 		"scenes":   s.cfg.Scenes,
 		"capture":  s.cfg.Capture,
-		"platform": s.cfg.Server.Host,
+		"platform": runtime.GOOS,
 	})
 }
 

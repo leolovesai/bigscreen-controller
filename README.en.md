@@ -119,6 +119,8 @@ Add a scene by appending a YAML block; restart to apply.
 
 **Three layers of auth.** A 32-byte random token generated at startup (`?k=` for passwordless entry); a cookie planted on first visit so the URL can be cleaned; a mandatory password for LAN access. WebSocket handshakes validate that Origin and Host are same-origin to block CSRF from other web pages. Wrong passwords are rate-limited to 1/s per IP.
 
+The cookie is derived from the password, so restarting the service keeps you signed in; changing the password invalidates every old session, and the controller answers a 401 by showing the password box instead of retrying forever.
+
 Deeper implementation notes and the traps we hit — macOS silently ignoring the CDP fullscreen state, `captureScreenshot` downscaling causing screen flicker, app windows appearing late in the target list — are documented in [DESIGN.md](DESIGN.md).
 
 ## Debug Tools

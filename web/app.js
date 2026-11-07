@@ -139,10 +139,40 @@ function connect() {
     dot.className = 'dot off';
     stat.textContent = '已断开，重连中…';
     clearTimeout(retryTimer);
-    retryTimer = setTimeout(() => { if (gen === wsGen) connect(); }, 1500);
+    retryTimer = setTimeout(async () => {
+      if (gen !== wsGen) return;
+      // 先分清是「服务端没起」还是「会话失效」：前者重试有意义，后者重试到天亮也没用
+      if (await sessionLost()) {
+        if (gen !== wsGen) return;
+        showLogin();
+        return;
+      }
+      if (gen === wsGen) connect();
+    }, 1500);
   };
 
   ws.onerror = () => {};
+}
+
+// 探一次 /api/state 判断 cookie 是否已经失效。只有 401 算失效；
+// fetch 直接抛错说明服务端根本没起来，那时继续退避重连。
+async function sessionLost() {
+  try {
+    const res = await fetch('/api/state', { headers: { 'Accept': 'application/json' } });
+    return res.status === 401;
+  } catch (_) {
+    return false;
+  }
+}
+
+// 会话失效（服务端换了 cookie 规则、或密码被改）时直接退回密码框，不再空转重连。
+// 登录成功后 onsubmit 会 location.reload()，重新走 boot()，不需要在这里续连。
+function showLogin() {
+  clearTimeout(retryTimer);
+  S.online = false;
+  dot.className = 'dot off';
+  stat.textContent = '会话已失效，请重新登录';
+  $('login').classList.remove('hidden');
 }
 
 // 手动重连：丢掉旧连接和画面缓存，立刻建一条新的，不等退避。

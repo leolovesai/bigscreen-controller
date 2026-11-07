@@ -119,6 +119,8 @@ scenes:
 
 **鉴权三层。** 启动生成 32 位随机 token（`?k=` 免密入口）；访问后种 cookie，URL 变干净；局域网访问强制配密码。WS 校验 Origin 与 Host 同源，防其他网页 CSRF 打到本地端口。密码错误有 1s/IP 限流。
 
+cookie 由密码派生，所以重启服务不会掉登录；反过来改密码会让所有旧会话失效，控制页面检测到 401 会直接弹出密码框，而不是无限重连。
+
 更多实现细节和踩坑记录见 [DESIGN.md](DESIGN.md)，包括 macOS 全屏被静默忽略、`captureScreenshot` 降采样导致闪白、app 窗口延迟出现在 target 列表等问题。
 
 ## 调试工具

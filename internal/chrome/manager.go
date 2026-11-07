@@ -843,6 +843,9 @@ func (m *Manager) Restart(ctx context.Context) error {
 	return m.Ensure(ctx)
 }
 
+// Close 关掉自己拉起的 Chrome。这里用 Kill 而不是 os.Interrupt：Windows 上
+// os.Interrupt 对非控制台进程无效，Signal 只会返回错误，Chrome 会残留下来；
+// Kill 在三个平台都生效，也与 Restart 的处理一致。
 func (m *Manager) Close() {
 	m.mu.Lock()
 	conn, pid, owned := m.conn, m.pid, m.owned
@@ -852,7 +855,7 @@ func (m *Manager) Close() {
 	}
 	if owned && pid != 0 {
 		if p, err := os.FindProcess(pid); err == nil {
-			_ = p.Signal(os.Interrupt)
+			_ = p.Kill()
 		}
 	}
 }
