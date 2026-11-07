@@ -11,3 +11,6 @@ config.yaml
 
 # 本地工作记录（agent 记忆目录）
 /.workbuddy/
+
+# 交叉编译产物
+/dist/
